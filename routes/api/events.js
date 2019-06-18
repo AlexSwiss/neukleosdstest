@@ -13,4 +13,28 @@ router.get('/', (req, res) => {
         .then(events => res.json(events));
 });
 
+//@route POST api/items 
+//@desc Add an Items
+//@access public
+router.post('/', (req, res) => {
+    const newEvent = new Event({
+        name: req.body.name,
+        venue: req.body.venue,
+        price: req.body.price
+    });
+    newEvent.save()
+        .then(event => res.json(event));
+});
+
+
+//@route DELETE api/items 
+//@desc Delete an Item
+//@access public
+router.delete('/:id', (req, res) => {
+    Event.findById(req.params.id)
+        .then(event => event.remove()
+        .then(() => res.json({sucess: true})))
+        .catch(err => res.status(404).json({sucess: false}));
+});
+
 module.exports = router;
